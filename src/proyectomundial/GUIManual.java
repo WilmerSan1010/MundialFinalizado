@@ -527,7 +527,7 @@ public class GUIManual extends JFrame {
      * información de los paneles
      */
     private void accionDashboardRes() {
-       
+       //modificando
         //prueba modificando
         jLabelTop.setText("Dash Resultados");
         /*JTextArea a = new JTextArea();
