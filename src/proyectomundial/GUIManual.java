@@ -732,6 +732,8 @@ public class GUIManual extends JFrame {
 // Establecer tamaño preferido del panel principal
         panelClasificados.setPreferredSize(new Dimension(450, 300));
         
+        
+        //
         jPanelMain.removeAll();
         jPanelMain.add(c_partidos);
         jPanelMain.add(p_goles);
