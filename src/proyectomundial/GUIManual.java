@@ -527,8 +527,7 @@ public class GUIManual extends JFrame {
      * información de los paneles
      */
     private void accionDashboardRes() {
-       //modificando
-        //prueba modificando
+       
         jLabelTop.setText("Dash Resultados");
         /*JTextArea a = new JTextArea();
         a.setText("En esta sección, teniendo en cuenta los datos que fueron cargados en la matriz de resultados \n"
@@ -735,7 +734,7 @@ public class GUIManual extends JFrame {
         panelClasificados.setPreferredSize(new Dimension(450, 300));
         
         
-        //
+        //modificando
         jPanelMain.removeAll();
         jPanelMain.add(c_partidos);
         jPanelMain.add(p_goles);
