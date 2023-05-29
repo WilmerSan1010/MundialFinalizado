@@ -1084,17 +1084,18 @@ public class GUIManual extends JFrame {
     private void pintarPanelDerecho() {
 
         // Define las dimensiones del panel
-        jPanelMain.setPreferredSize((new java.awt.Dimension(1000, 950)));
+        jPanelMain.setPreferredSize((new java.awt.Dimension(1000, 850)));
         jPanelMain.setMaximumSize(jPanelLabelTop.getPreferredSize());
         
         getContentPane().add(jPanelRight, java.awt.BorderLayout.CENTER);
         jPanelRight.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0));
         jPanelRight.add(jPanelLabelTop, BorderLayout.LINE_START);
         jPanelRight.add(jPanelMain);
-        jPanelRight.setPreferredSize((new java.awt.Dimension(1000, 950)));
+        jPanelRight.setPreferredSize((new java.awt.Dimension(1000, 850)));
         jPanelRight.setMaximumSize(jPanelRight.getPreferredSize());
+  
     }
-//
+
     
     /**
      * Función que permite pinta la barra azul del contenedor de contenidos.
