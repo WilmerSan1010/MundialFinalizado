@@ -527,6 +527,8 @@ public class GUIManual extends JFrame {
      * información de los paneles
      */
     private void accionDashboardRes() {
+       
+        //prueba modificando
         jLabelTop.setText("Dash Resultados");
         /*JTextArea a = new JTextArea();
         a.setText("En esta sección, teniendo en cuenta los datos que fueron cargados en la matriz de resultados \n"
