@@ -350,29 +350,60 @@ public class ResulltadosDAO {
 
     public List seleccion_mas_puntos_menos_puntos() {
 
-        String sql = "SELECT equipo, puntos\n"
+        String sql = "SELECT equipo, total_puntos\n"
                 + "FROM (\n"
-                + "    SELECT equipo, puntos,\n"
-                + "           ROW_NUMBER() OVER (ORDER BY puntos DESC) AS posicion_desc,\n"
-                + "           ROW_NUMBER() OVER (ORDER BY puntos ASC) AS posicion_asc\n"
+                + "    SELECT equipo, SUM(total_puntos) AS total_puntos\n"
                 + "    FROM (\n"
-                + "        SELECT equipo, SUM(puntos) AS puntos\n"
+                + "        SELECT local AS equipo, \n"
+                + "               SUM(CASE WHEN goles_local > goles_visitante THEN 3 WHEN goles_local = goles_visitante THEN 1 ELSE 0 END) AS total_puntos\n"
+                + "        FROM w_sanchez1.partidos\n"
+                + "        GROUP BY local\n"
+                + "        UNION ALL\n"
+                + "        SELECT visitante AS equipo, \n"
+                + "               SUM(CASE WHEN goles_local < goles_visitante THEN 3 WHEN goles_local = goles_visitante THEN 1 ELSE 0 END) AS total_puntos\n"
+                + "        FROM w_sanchez1.partidos\n"
+                + "        GROUP BY visitante\n"
+                + "    ) AS subquery\n"
+                + "    GROUP BY equipo\n"
+                + ") AS subquery2\n"
+                + "WHERE total_puntos = (\n"
+                + "    SELECT MAX(total_puntos) AS max_puntos\n"
+                + "    FROM (\n"
+                + "        SELECT equipo, SUM(total_puntos) AS total_puntos\n"
                 + "        FROM (\n"
                 + "            SELECT local AS equipo, \n"
-                + "                   CASE WHEN goles_local > goles_visitante THEN 3 WHEN goles_local = goles_visitante THEN 1 ELSE 0 END AS puntos\n"
-                + "            FROM w_sanchez1.partidos p  \n"
-                + "            GROUP BY local, goles_local, goles_visitante\n"
+                + "                   SUM(CASE WHEN goles_local > goles_visitante THEN 3 WHEN goles_local = goles_visitante THEN 1 ELSE 0 END) AS total_puntos\n"
+                + "            FROM w_sanchez1.partidos\n"
+                + "            GROUP BY local\n"
                 + "            UNION ALL\n"
                 + "            SELECT visitante AS equipo, \n"
-                + "                   CASE WHEN goles_local < goles_visitante THEN 3 WHEN goles_local = goles_visitante THEN 1 ELSE 0 END AS puntos\n"
-                + "            FROM w_sanchez1.partidos p  \n"
-                + "            GROUP BY visitante, goles_local, goles_visitante\n"
-                + "        ) AS subquery\n"
+                + "                   SUM(CASE WHEN goles_local < goles_visitante THEN 3 WHEN goles_local = goles_visitante THEN 1 ELSE 0 END) AS total_puntos\n"
+                + "            FROM w_sanchez1.partidos\n"
+                + "            GROUP BY visitante\n"
+                + "        ) AS subquery3\n"
                 + "        GROUP BY equipo\n"
-                + "    ) AS subquery2\n"
-                + ") AS subquery3\n"
-                + "WHERE posicion_desc = 1 OR posicion_asc = 1\n"
-                + "ORDER BY puntos DESC;";
+                + "    ) AS subquery4\n"
+                + ")\n"
+                + "OR total_puntos = (\n"
+                + "    SELECT MIN(total_puntos) AS min_puntos\n"
+                + "    FROM (\n"
+                + "        SELECT equipo, SUM(total_puntos) AS total_puntos\n"
+                + "        FROM (\n"
+                + "            SELECT local AS equipo, \n"
+                + "                   SUM(CASE WHEN goles_local > goles_visitante THEN 3 WHEN goles_local = goles_visitante THEN 1 ELSE 0 END) AS total_puntos\n"
+                + "            FROM w_sanchez1.partidos\n"
+                + "            GROUP BY local\n"
+                + "            UNION ALL\n"
+                + "            SELECT visitante AS equipo, \n"
+                + "                   SUM(CASE WHEN goles_local < goles_visitante THEN 3 WHEN goles_local = goles_visitante THEN 1 ELSE 0 END) AS total_puntos\n"
+                + "            FROM w_sanchez1.partidos\n"
+                + "            GROUP BY visitante\n"
+                + "        ) AS subquery5\n"
+                + "        GROUP BY equipo\n"
+                + "    ) AS subquery6\n"
+                + ")\n"
+                + "ORDER BY total_puntos DESC\n"
+                + "LIMIT 4";
         List seleccionMaxPuntosMINpuntos = new ArrayList<>();
 
         try {
@@ -381,7 +412,7 @@ public class ResulltadosDAO {
             if (result != null) {
                 while (result.next()) {
                     String seleccionMMIN = result.getString("equipo");
-                    int totalPuntos = result.getInt("puntos");
+                    int totalPuntos = result.getInt("total_puntos");
 
                     seleccionMaxPuntosMINpuntos.add(seleccionMMIN);
                     seleccionMaxPuntosMINpuntos.add(totalPuntos);
